@@ -8,7 +8,7 @@ function getCarByID(req, res) {
   const car = findCarByID(id);
   if (!car) {
     res.status(400);
-    res.send('Error');
+    res.send('Error, this car does not exist.');
   }
   res.status(200);
   res.send({ data: car });

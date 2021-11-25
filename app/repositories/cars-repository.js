@@ -24,4 +24,8 @@ function findAllCars() {
   return cars;
 }
 
-module.exports = { findAllCars };
+function findCarByID(carID) {
+  //const sql = "SELECT * FROM cars WHERE cars.id = carID"
+  return cars.find((car) => car.id === +carID);
+}
+module.exports = { findAllCars, findCarByID };

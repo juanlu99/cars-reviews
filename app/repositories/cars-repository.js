@@ -13,7 +13,7 @@ async function findCarByID(carID) {
   const pool = await getPool();
   const sql = 'select * from cars where id = ?';
   const [car] = await pool.query(sql, carID);
-  return car;
+  return car[0];
   // const sql2 = 'select * from cars where model = ? and brand = ?';
   // const [car] = await pool.query(sql, [model, brand]);
 }

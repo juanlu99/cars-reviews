@@ -1,7 +1,8 @@
 'use strict';
 
 const createJsonError = require('../errors/create-json-error');
-
+//Require funcion BD
+//schema joi
 async function nombreFuncion(req, res) {
   try {
     //validacion parametros entrada

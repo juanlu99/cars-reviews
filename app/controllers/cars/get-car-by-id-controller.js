@@ -8,7 +8,9 @@ async function getCarByID(req, res) {
     const { id } = req.params;
     const car = await findCarByID(id);
     if (car.length === 0) {
-      throw new Error('Error, we could not find this car.');
+      const error = new Error('Error, we could not find this error.');
+      error.status = 400;
+      throw error;
     }
     res.status(200);
     res.send({ data: car });

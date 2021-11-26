@@ -1,31 +1,21 @@
 'use strict';
 
-const cars = [
-  {
-    id: 1,
-    brand: 'Seat',
-    model: 'Ibiza',
-    year: 2019,
-    engine: 'Diesel',
-    cv: 60,
-  },
-  {
-    id: 2,
-    brand: 'Seat',
-    model: 'Toledo',
-    year: 1999,
-    engine: 'Gasolina',
-    cv: 120,
-  },
-];
+const getPool = require('../infrastructure/database');
 
-function findAllCars() {
-  //const sql = "SELECT * FROM cars";
+async function findAllCars() {
+  const pool = await getPool();
+  const sql = 'select * from cars';
+  const [cars] = await pool.query(sql);
   return cars;
 }
 
-function findCarByID(carID) {
-  //const sql = "SELECT * FROM cars WHERE cars.id = carID"
-  return cars.find((car) => car.id === +carID);
+async function findCarByID(carID) {
+  const pool = await getPool();
+  const sql = 'select * from cars where id = ?';
+  const [car] = await pool.query(sql, carID);
+  return car;
+  // const sql2 = 'select * from cars where model = ? and brand = ?';
+  // const [car] = await pool.query(sql, [model, brand]);
 }
+
 module.exports = { findAllCars, findCarByID };

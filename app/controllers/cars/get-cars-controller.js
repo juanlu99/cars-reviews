@@ -1,11 +1,16 @@
 'use strict';
 
+const createJsonError = require('../../errors/create-json-error');
 const { findAllCars } = require('../../repositories/cars-repository');
 
-function getCars(req, res) {
-  const cars = findAllCars();
-  res.status(200);
-  res.send({ data: cars });
+async function getCars(req, res) {
+  try {
+    const cars = await findAllCars();
+    res.status(200);
+    res.send({ data: cars });
+  } catch (error) {
+    createJsonError(error, res);
+  }
 }
 
 module.exports = getCars;

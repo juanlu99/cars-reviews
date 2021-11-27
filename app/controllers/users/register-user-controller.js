@@ -1,8 +1,12 @@
 'use strict';
 
-const createJsonError = require('../../errors/create-json-error');
 const { createUser, findUserByEmail } = require('../../repositories/users-repository');
 const Joi = require('joi');
+const bcrypt = require('bcryptjs');
+const randomstring = require('randomstring');
+const throwJsonError = require('../../errors/throw-json-error');
+const createJsonError = require('../../errors/create-json-error');
+const { sendMailRegister } = require('../../helpers/mail-smtp');
 const schema = Joi.object().keys({
   name: Joi.string().min(3).max(40).required(),
   email: Joi.string().email().required(),
@@ -16,17 +20,23 @@ async function registerUser(req, res) {
     await schema.validateAsync(body);
     const { name, email, password } = body;
     const user = await findUserByEmail(email);
-    if (user.length !== 0) {
-      const error = new Error('This email is already registered');
-      error.status = 400; //409 - conflict
-      throw error;
+    if (user) {
+      throwJsonError(400, 'This user already exists!!');
     }
     //crear el hash del password
+    const passwordHash = await bcrypt.hash(password, 12);
     //crear el verificationCode
+    const verificationCode = randomstring.generate(64);
     //creat objeto user con los campos
+    const userDB = { name, email, passwordHash, verificationCode };
     //llamamos base de datos con createUser
+    const userID = await createUser(userDB);
     //mandar email de verificacion
+    await sendMailRegister(name, email, verificationCode);
+    console.log(`http://localhost:3000/api/v1/users/activation?code=${verificationCode}`);
     //res.send()
+    res.status(201);
+    res.send({ id: userID });
   } catch (error) {
     createJsonError(error, res);
   }

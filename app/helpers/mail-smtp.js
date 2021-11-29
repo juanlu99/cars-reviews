@@ -24,7 +24,6 @@ async function sendMailRegister(name, email, code) {
   };
 
   const data = await transporter.sendMail(mailData);
-  console.log(data);
 
   return data;
 }
@@ -38,7 +37,6 @@ async function sendMailCorrectValidation(name, email) {
   };
 
   const data = await transporter.sendMail(mailData);
-  console.log(data);
 
   return data;
 }

@@ -33,7 +33,6 @@ async function registerUser(req, res) {
     const userID = await createUser(userDB);
     //mandar email de verificacion
     await sendMailRegister(name, email, verificationCode);
-    console.log(`http://localhost:3000/api/v1/users/activation?code=${verificationCode}`);
     //res.send()
     res.status(201);
     res.send({ id: userID });

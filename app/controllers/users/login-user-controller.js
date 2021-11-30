@@ -31,7 +31,7 @@ async function loginUser(req, res) {
     if (!verifiedAt) {
       throwJsonError(401, 'This account is not verified yet. Check your email for the activation link.');
     }
-    const tokenPayload = { id, name, role, ejemplo: 'asdf' };
+    const tokenPayload = { id, name, role };
     const { JWT_SECRET } = process.env;
     const token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: '20m' });
     const response = {

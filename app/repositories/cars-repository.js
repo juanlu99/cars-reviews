@@ -9,10 +9,10 @@ async function findAllCars() {
   return cars;
 }
 
-async function findCarByID(carID) {
+async function findCarByID(id) {
   const pool = await getPool();
   const sql = 'select * from cars where id = ?';
-  const [car] = await pool.query(sql, carID);
+  const [car] = await pool.query(sql, id);
   return car[0];
   // const sql2 = 'select * from cars where model = ? and brand = ?';
   // const [car] = await pool.query(sql, [model, brand]);

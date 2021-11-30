@@ -5,8 +5,10 @@ const throwJsonError = require('../errors/throw-json-error');
 function isAdmin(req) {
   const { role } = req.auth;
   if (!role || role !== 'admin') {
-    throwJsonError(401, 'You are not authorized.');
+    throwJsonError(403, 'You are not authorized.');
   }
+
+  return true;
 }
 
 module.exports = isAdmin;

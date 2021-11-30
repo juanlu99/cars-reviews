@@ -5,14 +5,20 @@ const validateUser = require('../controllers/users/activate-user-controller');
 const getUser = require('../controllers/users/get-users-controller');
 const loginUser = require('../controllers/users/login-user-controller');
 const registerUser = require('../controllers/users/register-user-controller');
+const getUserProfile = require('../controllers/users/get-user-profile-controller');
 const validateAuth = require('../middlewares/validate-auth');
+const deleteUserByID = require('../controllers/users/delete-user-by-id-controller');
 const router = express.Router();
 
+//PUBLICAS
 router.route('/').post(registerUser);
 router.route('/activation').get(validateUser);
 router.route('/login').post(loginUser);
 
+//PRIVADAS
 router.route('/').all(validateAuth).get(getUser);
+router.route('/profile').all(validateAuth).get(getUserProfile);
+router.route('/:id').all(validateAuth).delete(deleteUserByID);
 
 module.exports = router;
 
@@ -23,7 +29,7 @@ module.exports = router;
 
 //EndPoint Privadas
 //GET api/v1/users --> solo admin - DONE
-//GET api/v1/users/:id --> admin y propietario
+//GET api/v1/users/profile --> propietario - DONE
 //PUT api/v1/users/:id
 //PUT api/v1/users/:id/avatar
-//DELETE api/v1/users/:id --> admin y propietario
+//DELETE api/v1/users/:id --> admin

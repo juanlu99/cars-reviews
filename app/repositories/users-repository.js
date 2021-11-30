@@ -51,8 +51,21 @@ async function findAllUsers() {
   const pool = await getPool();
   const sql = 'select id, name, email, verifiedAt from users';
   const [users] = await pool.query(sql);
-
   return users;
 }
 
-module.exports = { createUser, findUserByEmail, activateUser, getUserByVerificationCode, findAllUsers };
+async function findUserByID(id) {
+  const pool = await getPool();
+  const sql = 'select name, email, image, createdAt, role from users where id = ?';
+  const [user] = await pool.query(sql, id);
+  return user[0];
+}
+
+async function removeUserByID(id) {
+  const pool = await getPool();
+  const sql = 'delete from users where id = ?';
+  await pool.query(sql, id);
+  return true;
+}
+
+module.exports = { createUser, findUserByEmail, activateUser, getUserByVerificationCode, findAllUsers, findUserByID, removeUserByID };

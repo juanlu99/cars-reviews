@@ -18,4 +18,15 @@ async function findCarByID(id) {
   // const [car] = await pool.query(sql, [model, brand]);
 }
 
-module.exports = { findAllCars, findCarByID };
+async function addImageByCarID(idCar, imageCar) {
+  const pool = await getPool();
+  const sql = `
+  insert into carImages(name, principal, idCar)
+  values (?, ?, ?);
+  `;
+  const [cars] = await pool.query(sql, [imageCar, 0, idCar]);
+
+  return true;
+}
+
+module.exports = { findAllCars, findCarByID, addImageByCarID };

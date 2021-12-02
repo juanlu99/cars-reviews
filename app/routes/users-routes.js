@@ -8,6 +8,7 @@ const registerUser = require('../controllers/users/register-user-controller');
 const getUserProfile = require('../controllers/users/get-user-profile-controller');
 const validateAuth = require('../middlewares/validate-auth');
 const deleteUserByID = require('../controllers/users/delete-user-by-id-controller');
+const uploadImageProfile = require('../controllers/users/upload-image-profile-controller');
 const router = express.Router();
 
 //PUBLICAS
@@ -19,6 +20,7 @@ router.route('/login').post(loginUser);
 router.route('/').all(validateAuth).get(getUser);
 router.route('/profile').all(validateAuth).get(getUserProfile);
 router.route('/:id').all(validateAuth).delete(deleteUserByID);
+router.route('/upload').all(validateAuth).post(uploadImageProfile);
 
 module.exports = router;
 

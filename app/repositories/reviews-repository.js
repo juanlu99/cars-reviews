@@ -22,4 +22,14 @@ async function findReviewByCarID(idCar) {
   return reviews;
 }
 
-module.exports = { addReview, findReviewByCarID };
+async function getAverageRating(idCar) {
+  const pool = await getPool();
+  const sql = `select avg(rating) as averageRating, 
+  count(rating) as numRatings 
+  from reviews where idCar = ?`;
+  const [avgRating] = await pool.query(sql, idCar);
+
+  return avgRating[0];
+}
+
+module.exports = { addReview, findReviewByCarID, getAverageRating };

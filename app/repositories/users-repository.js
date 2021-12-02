@@ -68,4 +68,15 @@ async function removeUserByID(id) {
   return true;
 }
 
-module.exports = { createUser, findUserByEmail, activateUser, getUserByVerificationCode, findAllUsers, findUserByID, removeUserByID };
+async function uploadUserImage(id, image) {
+  const pool = await getPool();
+  const sql = `
+  update users
+  set image = ?
+  where id = ?
+  `;
+  await pool.query(sql, [image, id]);
+  return true;
+}
+
+module.exports = { createUser, findUserByEmail, activateUser, getUserByVerificationCode, findAllUsers, findUserByID, removeUserByID, uploadUserImage };

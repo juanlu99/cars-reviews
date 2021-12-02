@@ -9,6 +9,7 @@ const validateAuth = require('../middlewares/validate-auth');
 const getReviewByCarID = require('../controllers/cars/get-reviews-by-car-id-controller');
 const getRating = require('../controllers/cars/get-average-rating-by-car-id-controller');
 const uploadCarImage = require('../controllers/cars/upload-car-image-by-id-controller');
+const updateCarInfo = require('../controllers/cars/update-car-by-id-controller');
 
 //publicos
 router.route('/').get(getCars);
@@ -18,5 +19,6 @@ router.route('/:carID/rating').get(getRating);
 //privados
 router.route('/:carID/reviews').get(getReviewByCarID).all(validateAuth).post(createReviewByCarID);
 router.route('/:carID/upload').all(validateAuth).post(uploadCarImage);
+router.route('/:carID').all(validateAuth).put(updateCarInfo);
 
 module.exports = router;

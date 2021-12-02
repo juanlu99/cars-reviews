@@ -24,9 +24,28 @@ async function addImageByCarID(idCar, imageCar) {
   insert into carImages(name, principal, idCar)
   values (?, ?, ?);
   `;
-  const [cars] = await pool.query(sql, [imageCar, 0, idCar]);
+  await pool.query(sql, [imageCar, 0, idCar]);
 
   return true;
 }
 
-module.exports = { findAllCars, findCarByID, addImageByCarID };
+async function updateCar(id, car) {
+  const { brand, model, year, engine, cv } = car;
+  const now = new Date();
+  const pool = await getPool();
+  const sql = `
+  update cars
+  set brand = ?, model = ?, year = ?, engine = ?, cv = ?, updatedAt = ?
+  where id = ?
+`;
+  await pool.query(sql, [brand, model, year, engine, cv, now, id]);
+  //await pool.query(sql, [
+  //...Object.values(car),
+  //now,
+  //id,
+  //])
+
+  return true;
+}
+
+module.exports = { findAllCars, findCarByID, addImageByCarID, updateCar };

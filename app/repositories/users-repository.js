@@ -12,7 +12,6 @@ async function createUser(user) {
   const { name, email, passwordHash, verificationCode } = user;
   const now = new Date();
   const [created] = await pool.query(sql, [name, email, passwordHash, verificationCode, 'reader', now]);
-  console.log('created', created);
   return created.insertId;
 }
 
@@ -56,7 +55,7 @@ async function findAllUsers() {
 
 async function findUserByID(id) {
   const pool = await getPool();
-  const sql = 'select name, email, image, createdAt, role from users where id = ?';
+  const sql = 'select name, email, password, image, createdAt, role from users where id = ?';
   const [user] = await pool.query(sql, id);
   return user[0];
 }
@@ -79,4 +78,29 @@ async function uploadUserImage(id, image) {
   return true;
 }
 
-module.exports = { createUser, findUserByEmail, activateUser, getUserByVerificationCode, findAllUsers, findUserByID, removeUserByID, uploadUserImage };
+async function updateUser(user) {
+  const { id, name, email, password } = user;
+  const now = new Date();
+  const pool = await getPool();
+  const sql = `
+  update users 
+  set name = ?, email = ?, password = ?, updatedAt = ?
+  where id = ?
+`;
+  await pool.query(sql, [name, email, password, now, id]);
+  return true;
+}
+
+async function updateVerificationCode(id, verificationCode) {
+  const now = new Date();
+  const pool = await getPool();
+  const sql = `
+  update users
+  set verificationCode = ?, updatedAt = ?, verifiedAt = NULL
+  where id = ?
+  `;
+  await pool.query(sql, [verificationCode, now, id]);
+  return true;
+}
+
+module.exports = { createUser, findUserByEmail, activateUser, getUserByVerificationCode, findAllUsers, findUserByID, removeUserByID, uploadUserImage, updateUser, updateVerificationCode };
